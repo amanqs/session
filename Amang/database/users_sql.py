@@ -3,7 +3,7 @@ from env import DATABASE_URL
 from sqlalchemy import Column, BigInteger
 
 if DATABASE_URL !="":
-    from Naya.database import BASE, SESSION
+    from Amang.database import BASE, SESSION
 else:
     BASE = object
 
