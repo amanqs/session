@@ -5,8 +5,8 @@ from env import DATABASE_URL
 from .basic import GUA
 
 if DATABASE_URL != '':
-    from Naya.database import SESSION
-    from Naya.database.users_sql import Users, num_users
+    from Amang.database import SESSION
+    from Amang.database.users_sql import Users, num_users
 
 
 @Client.on_message(~filters.service, group=1)
