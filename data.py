@@ -22,9 +22,13 @@ class Data:
 
     START = """
 Halo {}
-Selamat Datang Di {}
-Ini Adalah Bot String Session Anti Deak Ya Bangsat
-Buat Lu ID 5 atau ID 6 yang Baru Maen Telegram
+━━━━━━━━━━━━━━━━━━━━━━━━
+{} di buat untuk Membantu anda Untuk 
+Mengambil String Session Telegram 
+dengan Mudah dan AMAN untuk akun baru
+Dengan Id 5 atau 6!
+━━━━━━━━━━━━━━━━━━━━━━━━
+Managed With ☕️ By @amwang
     """
 
     HELP = """
