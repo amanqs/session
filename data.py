@@ -25,8 +25,7 @@ Halo {}
 ━━━━━━━━━━━━━━━━━━━━━━━━
 {} di buat untuk Membantu anda Untuk 
 Mengambil String Session Telegram 
-dengan Mudah dan AMAN untuk akun baru
-Dengan Id 5 atau 6!
+dengan Mudah
 ━━━━━━━━━━━━━━━━━━━━━━━━
 Managed With ☕️ By @amwang
     """
@@ -45,7 +44,7 @@ Managed With ☕️ By @amwang
     ABOUT = """
 **Tentang Bot ini** 
 
-{} di buat untuk Membantu anda Untuk
+Amang String Bot di buat untuk Membantu anda Untuk
 Mengambil String Session Telegram dengan
 Simple dan Mudah!
 
