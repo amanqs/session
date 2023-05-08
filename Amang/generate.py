@@ -51,7 +51,6 @@ async def generate_session(bot: Client, msg: Message, telethon=False, is_bot: bo
     user_id = msg.chat.id
     api_id = API_ID
     api_hash = API_HASH
-    """
     if await cancelled(api_id):
         return
     try:
@@ -63,7 +62,6 @@ async def generate_session(bot: Client, msg: Message, telethon=False, is_bot: bo
     if await cancelled(salah):
         return
     api_hash = api_hash_msg.text
-    """
     await asyncio.sleep(1.0)
     if not is_bot:
         t = "**Silahkan Masukkan Nomor Telepon Telegram Anda Dengan Format Kode Negara.** \n**Contoh: +628xnxx**"
