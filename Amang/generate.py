@@ -49,8 +49,10 @@ async def generate_session(bot: Client, msg: Message, telethon=False, is_bot: bo
     if is_bot:
         ty += " Bot"
     user_id = msg.chat.id
-    api_id_msg = await bot.ask(user_id, 'Please send your `API_ID`', filters=filters.text)
-    if await cancelled(api_id_msg):
+    api_id = API_ID
+    api_hash = API_HASH
+    """
+    if await cancelled(api_id):
         return
     try:
         api_id = int(api_id_msg.text)
@@ -58,9 +60,11 @@ async def generate_session(bot: Client, msg: Message, telethon=False, is_bot: bo
         await api_id_msg.reply('Not a valid API_ID (which must be an integer). Please start generating session again.', quote=True, reply_markup=InlineKeyboardMarkup(Data.generate_button))
         return
     api_hash_msg = await bot.ask(user_id, 'Please send your `API_HASH`', filters=filters.text)
-    if await cancelled(api_hash_msg):
+    if await cancelled(salah):
         return
     api_hash = api_hash_msg.text
+    """
+    await asyncio.sleep(1.0)
     if not is_bot:
         t = "**Silahkan Masukkan Nomor Telepon Telegram Anda Dengan Format Kode Negara.** \n**Contoh: +628xnxx**"
     else:
