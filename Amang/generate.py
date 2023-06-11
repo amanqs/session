@@ -148,7 +148,7 @@ async def generate_session(bot: Client, msg: Message, telethon=False, is_bot: bo
         string_session = client.session.save()
     else:
         string_session = await client.export_session_string()
-    text = f"**{ty.upper()} Berhasil Membuat String Session** \n\n`{string_session}` \n\n**Support : @amwangs**"
+    text = f"**String Session {ty.upper()} Berhasil Dibuat** \n\n`{string_session}` \n\n**Support : @amwangs**"
     try:
         if not is_bot:
             await bot.send_message(msg.chat.id, text)
@@ -158,7 +158,6 @@ async def generate_session(bot: Client, msg: Message, telethon=False, is_bot: bo
         pass
     await client.disconnect()
     await asyncio.sleep(1.0)
-    await bot.send_message(msg.chat.id, " {} **Berhasil membuat string session\n\nSilahkan periksa pesan tersimpan anda.**".format("telethon" if telethon else "pyrogram"))
 
 
 async def cancelled(msg):
