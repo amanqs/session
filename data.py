@@ -25,7 +25,7 @@ Halo {}
 ━━━━━━━━━━━━━━━━━━━━━━━━
 {} di buat untuk Membantu anda Untuk 
 Mengambil String Session Telegram 
-dengan Mudah
+dengan Mudah dan Aman Untuk id 5 & 6.
 ━━━━━━━━━━━━━━━━━━━━━━━━
 Managed With ☕️ By @amwang
     """

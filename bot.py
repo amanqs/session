@@ -29,4 +29,4 @@ if __name__ == "__main__":
     logging.info(f"@{uname} is now running!")
     idle()
     app.stop()
-    logging.info("Bot stopped. Alvida!")
+    logging.info("Bot stopped. Godbye!")
