@@ -24,7 +24,7 @@ class Users(BASE):
 
 
 if DATABASE_URL != "":
-    BASE.metadata.create_all(bind=engine, checkfirst=True)
+    Users.table.create(checkfirst=True)
 
 
 async def num_users():
