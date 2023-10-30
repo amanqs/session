@@ -1,6 +1,6 @@
 {
   "name": "Pyrogram String Session Generator",
-  "description": "Telegram bot to generate pyrogram string session",
+  "description": "Telegram bot to generate Pyrogram string session",
   "logo": "https://telegra.ph/file/7ec22c82f580a334dd13e.jpg",
   "keywords": [
     "telegram",
@@ -8,9 +8,11 @@
     "python",
     "pyrogram"
   ],
-    "buildpacks": [{
-    "url": "heroku/python"
-  }],
+  "buildpacks": [
+    {
+      "url": "heroku/python"
+    }
+  ],
   "formation": {
     "worker": {
       "quantity": 1,
@@ -23,6 +25,6 @@
       "description": "Don't change ANYTHING.",
       "required": true,
       "value": "ANYTHING"
-    },
+    }
   }
 }
