@@ -9,7 +9,7 @@ def filter(cmd: str):
 GUA = [753569421, 918837361, 1839010591]
 
 # Start Message
-@Client.on_message(filter("start"))
+@Client.on_message(filter("startx"))
 async def start(bot: Client, msg: Message):
     user = await bot.get_me()
     mention = user.mention
