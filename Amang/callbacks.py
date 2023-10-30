@@ -1,7 +1,7 @@
 import traceback
 from data import Data
 from pyrogram import Client
-from pyrogram.types import CallbackQuery, InlineKeyboardMarkup
+from pyrogram.types import CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton
 from Amang.generate import generate_session, ask_ques, buttons_ques
 
 # Callbacks
