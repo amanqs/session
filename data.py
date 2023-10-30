@@ -6,7 +6,6 @@ class Data:
 
     home_buttons = [
         generate_single_button,
-        [InlineKeyboardButton("Userbot Premium", callback_data="start_cmd")],  # Added comma here
         [InlineKeyboardButton(text=" Kembali ", callback_data="home")]
     ]
 
