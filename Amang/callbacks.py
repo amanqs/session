@@ -50,12 +50,9 @@ async def _callbacks(bot: Client, callback_query: CallbackQuery):
             if query == "pyrogram":
                 await callback_query.answer("harap dicatat bahwa sesi string tipe baru mungkin tidak berfungsi di semua bot, yaitu, hanya bot yang telah diperbarui ke pyrogram v2 yang akan berfungsi!", show_alert=True)
                 await generate_session(bot, callback_query.message)
-                """
-            # Maybe in future it'll come back.
             elif query == "pyrogram1":
                 await callback_query.answer()
                 await generate_session(bot, callback_query.message, old_pyro=True)
-                """
             elif query == "pyrogram_bot":
                 await callback_query.answer("Please note that this bot session will be of pyrogram v2", show_alert=True)
                 await generate_session(bot, callback_query.message, is_bot=True)
