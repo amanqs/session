@@ -41,7 +41,7 @@ async def _callbacks(bot: Client, callback_query: CallbackQuery):
             disable_web_page_preview=True,
             reply_markup=InlineKeyboardMarkup(
                 [
-                    [InlineKeyboardButton(text="O", callback_data="start_cmd")]
+                    [InlineKeyboardButton(text="Premium Userbot", callback_data="start0")]
                 ]
             )
         )
