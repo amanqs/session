@@ -4,6 +4,7 @@ psycopg2==2.*
 Telethon==1.*
 pyromod==1.5
 telethon
+motor
 TgCrypto==1.*
 git+https://github.com/amanqs/pyrogram
 git+https://github.com/amanqs/pyrogram1
