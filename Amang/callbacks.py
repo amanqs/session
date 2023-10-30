@@ -39,8 +39,13 @@ async def _callbacks(bot: Client, callback_query: CallbackQuery):
             message_id=message_id,
             text=Data.HELP,
             disable_web_page_preview=True,
-            reply_markup=InlineKeyboardMarkup(Data.home_button),
+            reply_markup=InlineKeyboardMarkup(
+                [
+                    [InlineKeyboardButton(text="O", callback_data="start_cmd")]
+                ]
+            )
         )
+
     elif query == "generate":
         await callback_query.answer()
         await callback_query.message.reply(ask_ques, reply_markup=InlineKeyboardMarkup(buttons_ques))
