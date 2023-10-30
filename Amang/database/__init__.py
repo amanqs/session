@@ -3,5 +3,5 @@ from motor.motor_asyncio import AsyncIOMotorClient as MongoCli
 import env
 
 
-mongo = MongoCli(config.MONGO_URL)
+mongo = MongoCli(env.MONGO_URL)
 db = mongo.AmangString
