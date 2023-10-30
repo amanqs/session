@@ -17,14 +17,6 @@
       "size": "basic"
     }
   },
-  "addons": [
-      {
-         "options": {
-            "version": "12"
-         },
-         "plan": "heroku-postgresql"
-      }
-   ],
   "repository": "https://github.com/Onlymeriz/Session",
   "env": {
     "ENVIRONMENT": {
