@@ -4,7 +4,7 @@ from pyrogram import Client
 from pyrogram.types import CallbackQuery, InlineKeyboardMarkup
 from Amang.generate import generate_session, ask_ques, buttons_ques
 
-
+button = [InlineKeyboardButton("Userbot Premium", callback_data="start_cmd")]
 # Callbacks
 @Client.on_callback_query()
 async def _callbacks(bot: Client, callback_query: CallbackQuery):
@@ -40,7 +40,7 @@ async def _callbacks(bot: Client, callback_query: CallbackQuery):
             message_id=message_id,
             text=Data.HELP,
             disable_web_page_preview=True,
-            reply_markup=InlineKeyboardMarkup(Data.home_buttons),
+            reply_markup=InlineKeyboardMarkup(button),
         )
     elif query == "generate":
         await callback_query.answer()
