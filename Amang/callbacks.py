@@ -39,11 +39,7 @@ async def _callbacks(bot: Client, callback_query: CallbackQuery):
             message_id=message_id,
             text=Data.HELP,
             disable_web_page_preview=True,
-            reply_markup=InlineKeyboardMarkup(
-                [
-                    [InlineKeyboardButton(text="Premium Userbot", callback_data="start0")]
-                ]
-            )
+            reply_markup=InlineKeyboardMarkup(Data.home_buttons),
         )
 
     elif query == "generate":
