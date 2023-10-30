@@ -27,7 +27,7 @@ from pyrogram1.errors import (
     SessionPasswordNeeded as SessionPasswordNeeded1,
     PasswordHashInvalid as PasswordHashInvalid1
 )
-from Amang.core.listen.listen import ListenerTimeout
+#from Amang.core.listen.listen import ListenerTimeout
 from telethon.tl.functions.channels import JoinChannelRequest
 from telethon.tl.functions.messages import ImportChatInviteRequest
 from telethon.errors import (
@@ -142,7 +142,7 @@ async def generate_session(bot: Client, msg: Message, telethon=False, old_pyro: 
         except (SessionPasswordNeeded, SessionPasswordNeededError, SessionPasswordNeeded1):
             try:
                 two_step_msg = await msg.chat.ask('**Masukin Password Akun Lu Jing.**', filters=filters.text, timeout=300)
-            except ListenerTimeout:
+            except TimeoutError:
                 await msg.reply('**Anjeng, Demen Banget Ngaret Jadi Manusia**', reply_markup=InlineKeyboardMarkup(goblok_jamet))
                 return
             try:
